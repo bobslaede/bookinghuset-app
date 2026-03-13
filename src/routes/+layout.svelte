@@ -2,6 +2,7 @@
   import { Willow, Modal } from '@svar-ui/svelte-core';
   import SettingsPage from '$lib/components/settings/SettingsPage.svelte';
   import { getSettings, getMissingSettings } from '$lib/services/settings';
+  import { checkForUpdate, installUpdate, type UpdateStatus } from '$lib/services/updater';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
@@ -10,6 +11,7 @@
   let missingFields = $state<string[]>([]);
   let checking = $state(true);
   let showSettingsModal = $state(false);
+  let updateStatus = $state<UpdateStatus>({ available: false });
 
   const settingsMissing = $derived(!settingsReady && !checking);
 
@@ -53,11 +55,26 @@
   $effect(() => {
     checkSettings();
   });
+
+  $effect(() => {
+    if (settingsReady) {
+      checkForUpdate().then((status) => {
+        if (!status.error) updateStatus = status;
+      });
+    }
+  });
 </script>
 
 <Willow>
 <main class="container">
   <button class="settings-btn" type="button" onclick={openSettings} title="Indstillinger">⚙️</button>
+
+  {#if updateStatus.available}
+    <div class="update-banner">
+      <span>Version {updateStatus.version} er tilgængelig.</span>
+      <button type="button" onclick={installUpdate}>Opdatér nu</button>
+    </div>
+  {/if}
 
   {#if checking}
     <div class="loading">Indlæser...</div>
@@ -92,6 +109,9 @@
     <SettingsPage
       onSaved={onSettingsSaved}
       onCancel={settingsMissing ? undefined : closeSettings}
+      {updateStatus}
+      onCheckUpdate={async () => updateStatus = await checkForUpdate()}
+      onInstallUpdate={installUpdate}
     />
   </Modal>
 {/if}
@@ -132,6 +152,33 @@
 
   .settings-btn:hover {
     opacity: 0.7;
+  }
+
+  .update-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: #e8f4fd;
+    border: 1px solid #b3d9f2;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .update-banner button {
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .update-banner button:hover {
+    background: #1565c0;
   }
 
   .loading {

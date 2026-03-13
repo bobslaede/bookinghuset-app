@@ -1,8 +1,21 @@
 <script lang="ts">
   import { Button, Text, Field } from '@svar-ui/svelte-core';
   import { getSettings, saveSettings, type AppSettings } from '$lib/services/settings';
+  import type { UpdateStatus } from '$lib/services/updater';
 
-  let { onSaved, onCancel }: { onSaved?: () => void; onCancel?: () => void } = $props();
+  let {
+    onSaved,
+    onCancel,
+    updateStatus,
+    onCheckUpdate,
+    onInstallUpdate,
+  }: {
+    onSaved?: () => void;
+    onCancel?: () => void;
+    updateStatus?: UpdateStatus;
+    onCheckUpdate?: () => void;
+    onInstallUpdate?: () => void;
+  } = $props();
 
   let settings = $state<AppSettings | null>(null);
   let loading = $state(true);
@@ -81,6 +94,25 @@
       </Field>
     </section>
 
+    {#if onCheckUpdate}
+      <section>
+        <h2>Opdatering</h2>
+        <div class="update-row">
+          <Button onclick={onCheckUpdate}>Tjek for opdatering</Button>
+          {#if updateStatus?.available}
+            <span class="update-available">Version {updateStatus.version} tilgængelig</span>
+            {#if onInstallUpdate}
+              <Button type="primary" onclick={onInstallUpdate}>Installér</Button>
+            {/if}
+          {:else if updateStatus?.error}
+            <span class="update-error">{updateStatus.error}</span>
+          {:else}
+            <span class="update-current">App er opdateret</span>
+          {/if}
+        </div>
+      </section>
+    {/if}
+
     <div class="actions">
       {#if onCancel}
         <Button onclick={onCancel}>Annullér</Button>
@@ -132,6 +164,28 @@
     background: #efe;
     border: 1px solid #cfc;
     color: #060;
+  }
+
+  .update-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .update-available {
+    color: #1976d2;
+    font-size: 0.9rem;
+  }
+
+  .update-current {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .update-error {
+    color: #c00;
+    font-size: 0.9rem;
   }
 
   .loading {

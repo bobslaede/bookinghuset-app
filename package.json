@@ -18,6 +18,7 @@
     "@svar-ui/svelte-core": "^2.4.1",
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/plugin-opener": "^2.5.3",
+    "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-store": "^2.4.2",
     "@tauri-apps/plugin-stronghold": "^2.3.1",
     "@tauri-apps/plugin-updater": "^2.10.0",
