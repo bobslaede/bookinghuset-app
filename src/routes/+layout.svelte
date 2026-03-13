@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Willow, Modal } from '@svar-ui/svelte-core';
+  import { listen } from '@tauri-apps/api/event';
   import SettingsPage from '$lib/components/settings/SettingsPage.svelte';
   import { getSettings, getMissingSettings } from '$lib/services/settings';
   import { checkForUpdate, installUpdate, type UpdateStatus } from '$lib/services/updater';
@@ -57,6 +58,17 @@
   });
 
   $effect(() => {
+    const unlisten = listen<string>('menu-event', (event) => {
+      if (event.payload === 'settings') openSettings();
+      if (event.payload === 'check_update') {
+        checkForUpdate().then((status) => updateStatus = status);
+        openSettings();
+      }
+    });
+    return () => { unlisten.then((fn) => fn()); };
+  });
+
+  $effect(() => {
     if (settingsReady) {
       checkForUpdate().then((status) => {
         if (!status.error) updateStatus = status;
@@ -67,7 +79,6 @@
 
 <Willow>
 <main class="container">
-  <button class="settings-btn" type="button" onclick={openSettings} title="Indstillinger">⚙️</button>
 
   {#if updateStatus.available}
     <div class="update-banner">
@@ -82,7 +93,7 @@
     {@render children()}
   {:else}
     <div class="setup-message">
-      <p>Indstillinger mangler. Klik ⚙️ for at komme i gang.</p>
+      <p>Indstillinger mangler. Åbn Bookinghuset-menuen for at komme i gang.</p>
     </div>
   {/if}
 </main>
@@ -136,22 +147,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-  }
-
-  .settings-btn {
-    position: fixed;
-    top: 0.75rem;
-    right: 1.5rem;
-    font-size: 1.6rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem;
-    line-height: 1;
-  }
-
-  .settings-btn:hover {
-    opacity: 0.7;
   }
 
   .update-banner {
