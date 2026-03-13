@@ -11,7 +11,8 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "tauri": "tauri"
   },
-  "license": "MIT",
+  "author": "bobslaede",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@svar-ui/svelte-core": "^2.4.1",
     "@tauri-apps/api": "^2.10.1",
