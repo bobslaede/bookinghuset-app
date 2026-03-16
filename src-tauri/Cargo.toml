@@ -1,6 +1,6 @@
 [package]
 name = "bookinghuset-app"
-version = "0.3.8"
+version = "0.3.9"
 description = ""
 authors = ["bobslaede"]
 edition = "2021"
