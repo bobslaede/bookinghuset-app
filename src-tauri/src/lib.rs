@@ -1,4 +1,4 @@
-use tauri::menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder};
+use tauri::menu::{MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder};
 use tauri::Emitter;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -33,9 +33,23 @@ pub fn run() {
                 .item(&quit)
                 .build()?;
 
-            let menu = MenuBuilder::new(app)
-                .item(&app_menu)
-                .build()?;
+            let mut menu_builder = MenuBuilder::new(app)
+                .item(&app_menu);
+
+            if cfg!(target_os = "macos") {
+                let edit_menu = SubmenuBuilder::new(app, "Edit")
+                    .item(&PredefinedMenuItem::undo(app, None)?)
+                    .item(&PredefinedMenuItem::redo(app, None)?)
+                    .separator()
+                    .item(&PredefinedMenuItem::cut(app, None)?)
+                    .item(&PredefinedMenuItem::copy(app, None)?)
+                    .item(&PredefinedMenuItem::paste(app, None)?)
+                    .item(&PredefinedMenuItem::select_all(app, None)?)
+                    .build()?;
+                menu_builder = menu_builder.item(&edit_menu);
+            }
+
+            let menu = menu_builder.build()?;
 
             app.set_menu(menu)?;
 
