@@ -22,6 +22,11 @@ pub fn run() {
                 .accelerator("CmdOrCtrl+R")
                 .build(app)?;
 
+            let update_selected = MenuItemBuilder::new("Opdatér valgte")
+                .id("update_selected")
+                .accelerator("CmdOrCtrl+U")
+                .build(app)?;
+
             let check_update = MenuItemBuilder::new("Tjek for opdatering")
                 .id("check_update")
                 .build(app)?;
@@ -34,6 +39,7 @@ pub fn run() {
             let app_menu = SubmenuBuilder::new(app, "Bookinghuset")
                 .item(&settings)
                 .item(&refresh)
+                .item(&update_selected)
                 .item(&check_update)
                 .separator()
                 .item(&quit)
@@ -66,6 +72,9 @@ pub fn run() {
                     }
                     "refresh" => {
                         let _ = app_handle.emit("menu-event", "refresh");
+                    }
+                    "update_selected" => {
+                        let _ = app_handle.emit("menu-event", "update_selected");
                     }
                     "check_update" => {
                         let _ = app_handle.emit("menu-event", "check_update");

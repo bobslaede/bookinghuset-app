@@ -147,9 +147,19 @@ ${userName}`;
     init();
   });
 
+  async function updateSelected() {
+    const freshMap = new Map(allArtists.map((a) => [a.slug, a]));
+    const merged = getPricelistArtists().map((stored) => {
+      const fresh = freshMap.get(stored.slug);
+      return fresh ? { ...fresh } : stored;
+    });
+    await setArtists(merged);
+  }
+
   $effect(() => {
     const unlisten = listen<string>('menu-event', (event) => {
       if (event.payload === 'refresh') init();
+      if (event.payload === 'update_selected') updateSelected();
     });
     return () => { unlisten.then((fn) => fn()); };
   });
@@ -321,7 +331,6 @@ ${userName}`;
     flex-direction: column;
     gap: 1rem;
     min-height: 0;
-    --wx-field-width: 600px;
   }
 
   .fields-section {
@@ -329,6 +338,7 @@ ${userName}`;
     flex-direction: column;
     gap: 0.75rem;
     flex-shrink: 0;
+    --wx-field-width: 100%;
   }
 
   .search-row {
