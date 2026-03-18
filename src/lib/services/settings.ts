@@ -7,6 +7,8 @@ export interface AppSettings {
   userName: string;
   userEmail: string;
   theme: 'light' | 'dark' | 'system';
+  emailImageWidth: number;
+  emailImageHeight: number;
 }
 
 const STORE_PATH = 'settings.json';
@@ -18,6 +20,8 @@ const defaultSettings: AppSettings = {
   userName: '',
   userEmail: '',
   theme: 'system',
+  emailImageWidth: 200,
+  emailImageHeight: 125,
 };
 
 let store: Store | null = null;

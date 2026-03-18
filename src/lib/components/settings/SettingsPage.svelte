@@ -27,6 +27,7 @@
   const tabs = [
     { id: 'user', label: 'Bruger' },
     { id: 'api', label: 'API' },
+    { id: 'email', label: 'Email' },
     { id: 'update', label: 'Opdatering' },
   ];
 
@@ -97,6 +98,13 @@
         </Field>
         <Field label="Image Base URL">
           <Text bind:value={settings.imageBaseUrl} />
+        </Field>
+      {:else if activeTab === 'email'}
+        <Field label="Billede bredde (px)">
+          <input type="number" bind:value={settings.emailImageWidth} min="50" max="600" />
+        </Field>
+        <Field label="Billede højde (px)">
+          <input type="number" bind:value={settings.emailImageHeight} min="50" max="600" />
         </Field>
       {:else if activeTab === 'update'}
         {#if onCheckUpdate}
@@ -191,5 +199,14 @@
 
   .loading {
     color: #666;
+  }
+
+  input[type='number'] {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
   }
 </style>

@@ -32,6 +32,8 @@
   let emailHtml = $state('');
   let expandedSlug = $state<string | null>(null);
   let imageBaseUrl = $state('');
+  let emailImageWidth = $state(200);
+  let emailImageHeight = $state(125);
 
   const priceTypeOptions = [
     { id: 'price', label: 'Firma' },
@@ -60,6 +62,8 @@
       await loadPricelist();
       const settings = await getSettings();
       imageBaseUrl = settings.imageBaseUrl;
+      emailImageWidth = settings.emailImageWidth;
+      emailImageHeight = settings.emailImageHeight;
       addIntroText(settings.userName);
 
       const [artists, categories] = await Promise.all([
@@ -119,6 +123,8 @@ ${userName}`;
       priceType,
       fallbackType,
       imageBaseUrl,
+      emailImageWidth,
+      emailImageHeight,
     );
   }
 

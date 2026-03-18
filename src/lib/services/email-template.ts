@@ -11,7 +11,7 @@ function getPrice(
     ? (artist[priceTypeFallback as keyof Artist] as string) ?? ''
     : '';
   const price = (artist[priceType as keyof Artist] as string) ?? fallback;
-  return price.replace(/\n/g, '<br />\n');
+  return price.replace(/\n/g, '<br>\n');
 }
 
 function renderArtistItem(
@@ -19,11 +19,13 @@ function renderArtistItem(
   priceType: string,
   priceTypeFallback: string,
   imageBaseUrl: string,
+  imgWidth: number,
+  imgHeight: number,
 ): string {
   const imgSrc = artist.thumbnail
     ? resizeImage(artist.thumbnail.handle, {
-        width: 200,
-        height: 125,
+        width: imgWidth,
+        height: imgHeight,
         align: 'faces',
         fit: 'crop',
       }, imageBaseUrl)
@@ -34,11 +36,11 @@ function renderArtistItem(
   const price = getPrice(artist, priceType, priceTypeFallback);
 
   const nameHtml = isPublished
-    ? `<a href="${link}" style="text-decoration: none; color: #085859;"><h4 style="margin-bottom: .2em; font-size: 1.2em; margin-top: 0;">${artist.name}</h4></a>`
-    : `<h4 style="margin-bottom: .2em; font-size: 1.2em; margin-top: 0;">${artist.name}</h4>`;
+    ? `<a href="${link}" style="text-decoration: none; color: #085859;"><span style="display: block; margin-bottom: 4px; font-size: 1.2em; font-weight: bold;">${artist.name}</span></a>`
+    : `<span style="display: block; margin-bottom: 4px; font-size: 1.2em; font-weight: bold;">${artist.name}</span>`;
 
   const imgTag = imgSrc
-    ? `<img src="${imgSrc}" style="border: 0;" alt="${artist.name}">`
+    ? `<img src="${imgSrc}" width="${imgWidth}" height="${imgHeight}" style="border: 0; display: block;" alt="${artist.name}">`
     : '';
 
   const imageHtml =
@@ -51,11 +53,11 @@ function renderArtistItem(
     <td align="center" valign="top" style="padding:10px;">
       <table width="600" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:600px; width:100%;">
         <tr>
-          <td width="400" align="left" valign="top" style="padding-right: 10px;">
+          <td width="${600 - imgWidth}" align="left" valign="top" style="padding-right: 10px;">
             ${nameHtml}
             <p>${price}</p>
           </td>
-          <td width="200" align="center" valign="top">
+          <td width="${imgWidth}" align="center" valign="top">
             ${imageHtml}
           </td>
         </tr>
@@ -71,7 +73,9 @@ function hrSection(): string {
     <td align="center" valign="top" style="padding:10px;">
       <table width="600" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:600px; width:100%;">
         <tr>
-          <td align="left" valign="top"><hr></td>
+          <td align="left" valign="top" style="padding: 10px 0;">
+            <div style="border-top: 1px solid #cccccc; font-size: 1px; line-height: 1px;">&nbsp;</div>
+          </td>
         </tr>
       </table>
     </td>
@@ -85,9 +89,11 @@ export function generateEmailHtml(
   priceType: string,
   priceTypeFallback: string,
   imageBaseUrl: string,
+  imgWidth: number = 200,
+  imgHeight: number = 125,
 ): string {
   const artistItems = artists
-    .map((a) => renderArtistItem(a, priceType, priceTypeFallback, imageBaseUrl))
+    .map((a) => renderArtistItem(a, priceType, priceTypeFallback, imageBaseUrl, imgWidth, imgHeight))
     .join('\n');
 
   return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -97,21 +103,17 @@ export function generateEmailHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Bookinghuset</title>
-</head>
-<body style="margin:0; padding:0; background-color:#F2F2F2;">
-<center>
   <style>
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-    p, a, td, span, div, th, body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; }
-    table { border-collapse: collapse !important; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; }
-    body { margin: 0 !important; padding: 0 !important; width: 100% !important; font-size: 14px; }
+    img { -ms-interpolation-mode: bicubic; }
     a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
     div[style*="margin: 16px 0;"] { margin: 0 !important; }
   </style>
-
-  <div style="background-color:#F2F2F2; max-width: 640px; margin: auto; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;">
+</head>
+<body style="margin:0; padding:0; background-color:#F2F2F2; width:100% !important; font-size:14px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;">
+<!--[if mso]><table width="640" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td><![endif]-->
+  <div style="background-color:#F2F2F2; max-width: 640px; margin: 0 auto; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;">
 
     <table width="640" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:640px; width:100%;" bgcolor="#FFFFFF">
       <tr>
@@ -120,12 +122,12 @@ export function generateEmailHtml(
             <tr>
               <td width="40" align="center" valign="top">
                 <a href="https://bookinghuset.dk/">
-                  <img src="https://bookinghuset.dk/static/logo_192.png" alt="B" style="border:0;font-size:30px;color: #0A3343; display: block; width: 40px; height: 40px;">
+                  <img src="https://bookinghuset.dk/static/logo_192.png" alt="B" width="40" height="40" style="border:0;font-size:30px;color: #0A3343; display: block;">
                 </a>
               </td>
               <td width="300" align="left" valign="top" style="padding-left: 10px;">
                 <a href="https://bookinghuset.dk/" style="font-size:30px;color: #0A3343; text-decoration: none; font-family: 'Roboto', 'Helvetica Neue', Verdana, sans-serif">
-                  <span style="font-weight: bold;">BOOKING</span><span style="font-weight: 100;">HUSET</span>
+                  <span style="font-weight: bold;">BOOKING</span><span style="font-weight: 300;">HUSET</span>
                 </a>
               </td>
             </tr>
@@ -168,7 +170,7 @@ export function generateEmailHtml(
     </table>
 
   </div>
-</center>
+<!--[if mso]></td></tr></table><![endif]-->
 </body>
 </html>`;
 }
