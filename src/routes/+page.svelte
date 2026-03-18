@@ -37,6 +37,7 @@
     { id: 'price', label: 'Firma' },
     { id: 'priceVenue', label: 'Spillested' },
     { id: 'priceFestival', label: 'Festival' },
+    { id: 'pricePrivat', label: 'Privat' },
   ];
 
   let selectedArtists = $derived(getPricelistArtists());
@@ -264,6 +265,12 @@ ${userName}`;
                         onchange={(ev) => updateArtist(artist.slug, { priceFestival: ev.value })}
                       />
                     </Field>
+                    <Field label="Privat">
+                      <TextArea
+                        value={artist.pricePrivat}
+                        onchange={(ev) => updateArtist(artist.slug, { pricePrivat: ev.value })}
+                      />
+                    </Field>
                   </div>
                   {#if artist.thumbnail}
                     <img
@@ -314,6 +321,7 @@ ${userName}`;
     flex-direction: column;
     gap: 1rem;
     min-height: 0;
+    --wx-field-width: 600px;
   }
 
   .fields-section {

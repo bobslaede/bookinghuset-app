@@ -17,6 +17,7 @@ export interface Artist {
   price: string;
   priceVenue: string;
   priceFestival: string;
+  pricePrivat: string;
   info: string;
   youTube: string[];
   references: string;

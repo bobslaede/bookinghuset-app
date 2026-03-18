@@ -52,6 +52,7 @@ fragment ArtistFragment on Artist {
   price
   priceVenue
   priceFestival
+  pricePrivat
   tags { tag, slug }
   banner { handle }
   images { handle }
