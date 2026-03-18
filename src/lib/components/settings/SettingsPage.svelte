@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Text, Field } from '@svar-ui/svelte-core';
+  import { Button, Text, Field, Tabs } from '@svar-ui/svelte-core';
   import { getSettings, saveSettings, type AppSettings } from '$lib/services/settings';
   import type { UpdateStatus } from '$lib/services/updater';
 
@@ -22,6 +22,13 @@
   let saving = $state(false);
   let error = $state<string | null>(null);
   let successMessage = $state<string | null>(null);
+  let activeTab = $state<string | number>('user');
+
+  const tabs = [
+    { id: 'user', label: 'Bruger' },
+    { id: 'api', label: 'API' },
+    { id: 'update', label: 'Opdatering' },
+  ];
 
   async function loadSettings() {
     loading = true;
@@ -71,47 +78,44 @@
   {#if loading}
     <div class="loading">Indlæser indstillinger...</div>
   {:else if settings}
-    <section>
-      <h2>Bruger</h2>
-      <Field label="Navn">
-        <Text bind:value={settings.userName} placeholder="Dit navn" />
-      </Field>
-      <Field label="Email">
-        <Text bind:value={settings.userEmail} placeholder="dig@bookinghuset.dk" />
-      </Field>
-    </section>
+    <Tabs options={tabs} bind:value={activeTab} />
 
-    <section>
-      <h2>GraphQL / Hygraph</h2>
-      <Field label="Endpoint">
-        <Text bind:value={settings.graphqlEndpoint} />
-      </Field>
-      <Field label="API Token">
-        <Text bind:value={settings.graphqlToken} placeholder="Bearer token" />
-      </Field>
-      <Field label="Image Base URL">
-        <Text bind:value={settings.imageBaseUrl} />
-      </Field>
-    </section>
-
-    {#if onCheckUpdate}
-      <section>
-        <h2>Opdatering</h2>
-        <div class="update-row">
-          <Button onclick={onCheckUpdate}>Tjek for opdatering</Button>
-          {#if updateStatus?.available}
-            <span class="update-available">Version {updateStatus.version} tilgængelig</span>
-            {#if onInstallUpdate}
-              <Button type="primary" onclick={onInstallUpdate}>Installér</Button>
+    <div class="tab-content">
+      {#if activeTab === 'user'}
+        <Field label="Navn">
+          <Text bind:value={settings.userName} placeholder="Dit navn" />
+        </Field>
+        <Field label="Email">
+          <Text bind:value={settings.userEmail} placeholder="dig@bookinghuset.dk" />
+        </Field>
+      {:else if activeTab === 'api'}
+        <Field label="GraphQL Endpoint">
+          <Text bind:value={settings.graphqlEndpoint} />
+        </Field>
+        <Field label="API Token">
+          <Text bind:value={settings.graphqlToken} placeholder="Bearer token" />
+        </Field>
+        <Field label="Image Base URL">
+          <Text bind:value={settings.imageBaseUrl} />
+        </Field>
+      {:else if activeTab === 'update'}
+        {#if onCheckUpdate}
+          <div class="update-row">
+            <Button onclick={onCheckUpdate}>Tjek for opdatering</Button>
+            {#if updateStatus?.available}
+              <span class="update-available">Version {updateStatus.version} tilgængelig</span>
+              {#if onInstallUpdate}
+                <Button type="primary" onclick={onInstallUpdate}>Installér</Button>
+              {/if}
+            {:else if updateStatus?.error}
+              <span class="update-error">{updateStatus.error}</span>
+            {:else}
+              <span class="update-current">App er opdateret</span>
             {/if}
-          {:else if updateStatus?.error}
-            <span class="update-error">{updateStatus.error}</span>
-          {:else}
-            <span class="update-current">App er opdateret</span>
-          {/if}
-        </div>
-      </section>
-    {/if}
+          </div>
+        {/if}
+      {/if}
+    </div>
 
     <div class="actions">
       {#if onCancel}
@@ -127,6 +131,7 @@
 <style>
   .settings-page {
     max-width: 600px;
+    text-align: left;
   }
 
   .actions {
@@ -137,15 +142,11 @@
     border-top: 1px solid #e0e0e0;
   }
 
-  h2 {
-    font-size: 1.1rem;
-    margin: 0 0 1rem 0;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  section {
-    margin-bottom: 2rem;
+  .tab-content {
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .message {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Willow, Modal } from '@svar-ui/svelte-core';
-  import { listen } from '@tauri-apps/api/event';
+  import { Toolbar, type IToolbarItem } from '@svar-ui/svelte-toolbar';
+  import { listen, emit } from '@tauri-apps/api/event';
   import SettingsPage from '$lib/components/settings/SettingsPage.svelte';
   import { getSettings, getMissingSettings } from '$lib/services/settings';
   import { checkForUpdate, installUpdate, type UpdateStatus } from '$lib/services/updater';
@@ -53,6 +54,21 @@
     }
   }
 
+  const toolbarItems: IToolbarItem[] = [
+    { id: 'refresh', comp: 'button', text: 'Genindlæs' },
+    { id: 'update_selected', comp: 'button', text: 'Opdatér valgte' },
+    { comp: 'spacer' },
+    { id: 'settings', comp: 'button', text: 'Indstillinger' },
+  ];
+
+  function onToolbarClick(ev: { item: IToolbarItem }) {
+    if (ev.item.id === 'settings') {
+      openSettings();
+    } else {
+      emit('menu-event', ev.item.id as string);
+    }
+  }
+
   $effect(() => {
     checkSettings();
   });
@@ -84,6 +100,15 @@
     <div class="update-banner">
       <span>Version {updateStatus.version} er tilgængelig.</span>
       <button type="button" onclick={installUpdate}>Opdatér nu</button>
+    </div>
+  {/if}
+
+  {#if settingsReady}
+    <div class="toolbar">
+      <Toolbar
+        items={toolbarItems}
+        onclick={onToolbarClick}
+      />
     </div>
   {/if}
 
@@ -141,12 +166,21 @@
     margin: 0;
   }
 
+
   .container {
     padding: 1rem 2rem;
     height: 100dvh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+  }
+
+  .toolbar {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin-bottom: 0.5rem;
   }
 
   .update-banner {

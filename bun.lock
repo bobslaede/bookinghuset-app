@@ -6,12 +6,14 @@
       "name": "bookinghuset-app",
       "dependencies": {
         "@svar-ui/svelte-core": "^2.4.1",
+        "@svar-ui/svelte-toolbar": "^2.4.1",
         "@tauri-apps/api": "^2.10.1",
         "@tauri-apps/plugin-opener": "^2.5.3",
         "@tauri-apps/plugin-process": "^2.3.1",
         "@tauri-apps/plugin-store": "^2.4.2",
         "@tauri-apps/plugin-stronghold": "^2.3.1",
         "@tauri-apps/plugin-updater": "^2.10.0",
+        "install": "^0.13.0",
         "marked": "^17.0.4",
         "svelte-dnd-action": "^0.9.69",
       },
@@ -154,6 +156,8 @@
 
     "@svar-ui/svelte-core": ["@svar-ui/svelte-core@2.4.1", "", { "dependencies": { "@svar-ui/core-locales": "2.4.1", "@svar-ui/lib-dom": "0.12.0", "@svar-ui/lib-svelte": "0.5.2" } }, "sha512-Y/DDFSwl6KMzMV/Ar7ChIxY8uC2bDgNFlpWpTXLqEjQPboVUDLqtXToBwSfZKFEYo45xVEjeYqU6nbe2ndd56Q=="],
 
+    "@svar-ui/svelte-toolbar": ["@svar-ui/svelte-toolbar@2.4.1", "", { "dependencies": { "@svar-ui/lib-dom": "0.12.0", "@svar-ui/svelte-core": "2.4.1" } }, "sha512-Tkown7JF4CA0+R2luuaiGGT7lUEoXEBAxTAZmNqtbI1hvzt9Ld5HBxiy3twKHzjBY6w/S+d9vigiVrbc81xfXg=="],
+
     "@sveltejs/acorn-typescript": ["@sveltejs/acorn-typescript@1.0.8", "", { "peerDependencies": { "acorn": "^8.9.0" } }, "sha512-esgN+54+q0NjB0Y/4BomT9samII7jGwNy/2a3wNZbT2A2RpmXsXwUt24LvLhx6jUq2gVk4cWEvcRO6MFQbOfNA=="],
 
     "@sveltejs/adapter-static": ["@sveltejs/adapter-static@3.0.10", "", { "peerDependencies": { "@sveltejs/kit": "^2.0.0" } }, "sha512-7D9lYFWJmB7zxZyTE/qxjksvMqzMuYrrsyh1f4AlZqeZeACPRySjbC3aFiY55wb1tWUaKOQG9PVbm74JcN2Iew=="],
@@ -233,6 +237,8 @@
     "fdir": ["fdir@6.5.0", "", { "peerDependencies": { "picomatch": "^3 || ^4" }, "optionalPeers": ["picomatch"] }, "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg=="],
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
+
+    "install": ["install@0.13.0", "", {}, "sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA=="],
 
     "is-reference": ["is-reference@3.0.3", "", { "dependencies": { "@types/estree": "^1.0.6" } }, "sha512-ixkJoqQvAP88E6wLydLGGqCJsrFUnqoH6HnaczB8XmDH1oaWU+xxdptvikTgaEhtZ53Ky6YXiBuUI2WXLMCwjw=="],
 
