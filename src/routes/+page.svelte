@@ -180,6 +180,8 @@ ${userName}`;
     const unlisten = listen<string>('menu-event', (event) => {
       if (event.payload === 'refresh') init();
       if (event.payload === 'update_selected') updateSelected();
+      if (event.payload === 'generate') onGenerate();
+      if (event.payload === 'copy_html') copyHtmlToClipboard();
     });
     return () => { unlisten.then((fn) => fn()); };
   });
@@ -250,12 +252,6 @@ ${userName}`;
         <div class="actions">
           <Button onclick={() => sortAllByName()}>Sortér A-Å</Button>
           <Button type="danger" onclick={removeAll}>Ryd liste</Button>
-          <Button type="primary" onclick={onGenerate}>Generér prisliste</Button>
-          {#if emailHtml}
-            <Button onclick={copyHtmlToClipboard}>
-              {copySuccess ? 'Kopieret!' : 'Kopiér HTML'}
-            </Button>
-          {/if}
         </div>
 
         <div

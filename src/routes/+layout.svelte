@@ -58,6 +58,9 @@
     { id: 'refresh', comp: 'button', text: 'Genindlæs' },
     { id: 'update_selected', comp: 'button', text: 'Opdatér valgte' },
     { comp: 'spacer' },
+    { id: 'generate', comp: 'button', text: 'Generér prisliste' },
+    { id: 'copy_html', comp: 'button', text: 'Kopiér HTML' },
+    { comp: 'spacer' },
     { id: 'settings', comp: 'button', text: 'Indstillinger' },
   ];
 
