@@ -2,6 +2,7 @@
   import { marked } from 'marked';
   import { Button, TextArea, Checkbox, Segmented, Field, Combo } from '@svar-ui/svelte-core';
   import { dndzone } from 'svelte-dnd-action';
+  import { listen } from '@tauri-apps/api/event';
   import { fetchArtists, fetchCategories, resizeImage } from '$lib/services/graphql';
   import { getSettings } from '$lib/services/settings';
   import { generateEmailHtml } from '$lib/services/email-template';
@@ -143,6 +144,13 @@ ${userName}`;
 
   $effect(() => {
     init();
+  });
+
+  $effect(() => {
+    const unlisten = listen<string>('menu-event', (event) => {
+      if (event.payload === 'refresh') init();
+    });
+    return () => { unlisten.then((fn) => fn()); };
   });
 </script>
 

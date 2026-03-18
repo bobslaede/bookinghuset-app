@@ -17,6 +17,11 @@ pub fn run() {
                 .accelerator("CmdOrCtrl+,")
                 .build(app)?;
 
+            let refresh = MenuItemBuilder::new("Genindlæs")
+                .id("refresh")
+                .accelerator("CmdOrCtrl+R")
+                .build(app)?;
+
             let check_update = MenuItemBuilder::new("Tjek for opdatering")
                 .id("check_update")
                 .build(app)?;
@@ -28,6 +33,7 @@ pub fn run() {
 
             let app_menu = SubmenuBuilder::new(app, "Bookinghuset")
                 .item(&settings)
+                .item(&refresh)
                 .item(&check_update)
                 .separator()
                 .item(&quit)
@@ -57,6 +63,9 @@ pub fn run() {
                 match event.id().as_ref() {
                     "settings" => {
                         let _ = app_handle.emit("menu-event", "settings");
+                    }
+                    "refresh" => {
+                        let _ = app_handle.emit("menu-event", "refresh");
                     }
                     "check_update" => {
                         let _ = app_handle.emit("menu-event", "check_update");
