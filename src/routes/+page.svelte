@@ -34,6 +34,20 @@
   let imageBaseUrl = $state('');
   let emailImageWidth = $state(200);
   let emailImageHeight = $state(125);
+  let copySuccess = $state(false);
+
+  async function copyHtmlToClipboard() {
+    if (!emailHtml) return;
+    try {
+      const blob = new Blob([emailHtml], { type: 'text/html' });
+      const item = new ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([item]);
+      copySuccess = true;
+      setTimeout(() => copySuccess = false, 2000);
+    } catch (e) {
+      console.error('Clipboard write failed:', e);
+    }
+  }
 
   const priceTypeOptions = [
     { id: 'price', label: 'Firma' },
@@ -237,6 +251,11 @@ ${userName}`;
           <Button onclick={() => sortAllByName()}>Sortér A-Å</Button>
           <Button type="danger" onclick={removeAll}>Ryd liste</Button>
           <Button type="primary" onclick={onGenerate}>Generér prisliste</Button>
+          {#if emailHtml}
+            <Button onclick={copyHtmlToClipboard}>
+              {copySuccess ? 'Kopieret!' : 'Kopiér HTML'}
+            </Button>
+          {/if}
         </div>
 
         <div
