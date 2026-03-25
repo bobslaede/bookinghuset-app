@@ -3,6 +3,7 @@
   import { Button, TextArea, Checkbox, Segmented, Field, Combo } from '@svar-ui/svelte-core';
   import { dndzone } from 'svelte-dnd-action';
   import { listen } from '@tauri-apps/api/event';
+  import { writeHtml } from '@tauri-apps/plugin-clipboard-manager';
   import { fetchArtists, fetchCategories, resizeImage } from '$lib/services/graphql';
   import { getSettings } from '$lib/services/settings';
   import { generateEmailHtml } from '$lib/services/email-template';
@@ -39,9 +40,7 @@
   async function copyHtmlToClipboard() {
     if (!emailHtml) return;
     try {
-      const blob = new Blob([emailHtml], { type: 'text/html' });
-      const item = new ClipboardItem({ 'text/html': blob });
-      await navigator.clipboard.write([item]);
+      await writeHtml(emailHtml);
       copySuccess = true;
       setTimeout(() => copySuccess = false, 2000);
     } catch (e) {

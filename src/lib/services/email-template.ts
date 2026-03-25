@@ -120,14 +120,9 @@ export function generateEmailHtml(
         <td align="center" valign="top" style="padding:0px;">
           <table width="350" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:390px; width:100%;">
             <tr>
-              <td width="40" align="center" valign="top">
+              <td align="center" valign="top">
                 <a href="https://bookinghuset.dk/">
-                  <img src="https://bookinghuset.dk/static/logo_192.png" alt="B" width="40" height="40" style="border:0;font-size:30px;color: #0A3343; display: block;">
-                </a>
-              </td>
-              <td width="300" align="left" valign="top" style="padding-left: 10px;">
-                <a href="https://bookinghuset.dk/" style="font-size:30px;color: #0A3343; text-decoration: none; font-family: 'Roboto', 'Helvetica Neue', Verdana, sans-serif">
-                  <span style="font-weight: bold;">BOOKING</span><span style="font-weight: 300;">HUSET</span>
+                  <img src="https://www.bookinghuset.dk/static/email/email-logo-400.png" alt="BOOKINGHUSET" width="399" height="95" style="border:0;font-size:30px;color: #0A3343; display: block; width: 100% !important;">
                 </a>
               </td>
             </tr>
