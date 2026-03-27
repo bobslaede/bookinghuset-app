@@ -318,7 +318,7 @@ dependencies = [
 
 [[package]]
 name = "bookinghuset-app"
-version = "0.3.15"
+version = "0.3.16"
 dependencies = [
  "serde",
  "serde_json",

@@ -40,7 +40,7 @@
   async function copyHtmlToClipboard() {
     if (!emailHtml) return;
     try {
-      await writeHtml(emailHtml);
+      await writeHtml(emailHtml, 'Bookinghuset prisliste');
       copySuccess = true;
       setTimeout(() => copySuccess = false, 2000);
     } catch (e) {

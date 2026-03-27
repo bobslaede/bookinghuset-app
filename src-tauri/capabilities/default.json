@@ -9,6 +9,7 @@
     "store:default",
     "updater:default",
     "process:default",
-    "clipboard-manager:default"
+    "clipboard-manager:default",
+    "clipboard-manager:allow-write-html"
   ]
 }
